@@ -8,6 +8,7 @@ import {
 } from "../controller/address.controller"
 
 export async function createAddressRoute(req: Request, res: Response) {
+    // return res.status(200).json(req.body)
     return await createAddressHandler(req, res)
 }
 

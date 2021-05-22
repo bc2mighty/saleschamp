@@ -12,10 +12,12 @@ export async function createAddressHandler(req: Request, res: Response) {
     try {
         const address = await createAddress(req.body)
         return res
-            .setHeader("Location", `${req.headers.host}/address`)
+            // .setHeader("Location", `/address`)
             .status(201)
             .json(address)
     } catch (error) {
+        console.log(error);
+        
         return res
             .status(422)
             .json({message: error.message})
@@ -37,13 +39,18 @@ export async function getAllAddressHandler(req: Request, res: Response) {
 
 export async function getAddressHandler(req: Request, res: Response) {
     let address
-    let dateOptions: object = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
     try {
-        address = await client.getAsync(req.params.id as string)
+        address = await client.getAsync(req.params.id as string) 
         
-        if (!address) {
+        if (address == null) {
             address = await getAddress(req.params.id as string)
-            await client.set(req.params.id as string, JSON.stringify(address))
+            if (address) {
+                await client.set(req.params.id as string, JSON.stringify(address))
+            } else {
+                return res
+                    .status(404)
+                    .json({message: `Requested Address has been deleted`})
+            }
         } else {
             address = JSON.parse(address)
         }
@@ -66,6 +73,8 @@ export async function updateAddressHandler(req: Request, res: Response) {
         address = await getAddress(req.params.id as string)
         let status: string | null = address.status
         if(!status || status === "not at home") {
+            await client.set(req.params.id as string, JSON.stringify(address))
+
             address = await updateAddress(req.params.id as string, req.body as object)
             return res
                 .status(200)
@@ -75,7 +84,7 @@ export async function updateAddressHandler(req: Request, res: Response) {
             .status(403)
             .json(
                 {
-                    message: `Changes Disallowed beacuse Address status is ${address.status}`
+                    message: `Changes Disallowed beacuse the current Address status is ${address.status}`
                 }
             )
     } catch (error) {
@@ -91,6 +100,7 @@ export async function updateAddressHandler(req: Request, res: Response) {
 
 export async function deleteAddressHandler(req: Request, res: Response) {
     try {
+        await client.del(req.params.id as string)
         await deleteAddress(req.params.id as string)
         return res
             .status(204)

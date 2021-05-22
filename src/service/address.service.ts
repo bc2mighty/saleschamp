@@ -3,6 +3,8 @@ import Address, { AddressDocument } from "../model/address.model"
 
 export async function createAddress (input: DocumentDefinition<AddressDocument>) {
     try {
+        console.log(input);
+        
         return await Address.create(input)
     } catch (error) {
         throw new Error(error)
