@@ -16,3 +16,12 @@ export async function allAddresses () {
         throw new Error(error)
     }
 }
+
+export async function getAddress (id: string) {
+    try {
+        console.log(id)        
+        return await Address.findById(id)
+    } catch (error) {
+        throw new Error(error)
+    }
+}
