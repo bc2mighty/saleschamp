@@ -36,13 +36,44 @@ const AddressSchema = new mongoose.Schema({
     },
     numberAddition: {
         type: String,
+    },
+    status: {
+        type: String,
+        default: null,
+    },
+    name: {
+        type: String,
+        default: null,
+    },
+    email: {
+        type: String,
+        default: null,
     }
 }, {
     timestamps: true
 })
 
 AddressSchema.path('postalcode').validate((code: any) => {
-    return code.length === 5 && isNaN(code)
-}, "Post Code must be a string of length 5")
+    return code.length === 5 && code.match(/^[0-9]+$/) != null
+}, "Post Code must be a numeral string of length 5")
+
+AddressSchema.pre<AddressDocument>("save", function (next) {
+    if( !this.numberAddition ) this.numberAddition = ""
+    next()
+})
+
+AddressSchema.set("toJSON", {
+    virtuals: true,
+    versionKey: false,
+    transform: function(doc: any, ret: any) {
+        ret.id = ret._id
+        delete ret._id;
+        delete ret._v;
+        return ret; 
+
+    }
+})
 
 const Address = mongoose.model<AddressDocument>("Address", AddressSchema)
+
+export default Address
