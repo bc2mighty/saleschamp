@@ -1,0 +1,8 @@
+{
+  "name": "address",
+  "version": "1.0.0",
+  "description": "Simple Address API",
+  "main": "index.js",
+  "author": "Tunmise Akinade",
+  "license": "MIT"
+}
