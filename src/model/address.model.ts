@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import iso from "../../exports/countryISO"
+import validator from "validator"
 
 export interface AddressDocument extends mongoose.Document {
     country: string,
@@ -40,6 +41,7 @@ const AddressSchema = new mongoose.Schema({
     status: {
         type: String,
         default: null,
+        enum: ["not at home", "not interested", "interested"]
     },
     name: {
         type: String,
@@ -57,7 +59,7 @@ AddressSchema.path('postalcode').validate((code: any) => {
     return code.length === 5 && code.match(/^[0-9]+$/) != null
 }, "Post Code must be a numeral string of length 5")
 
-AddressSchema.pre<AddressDocument>("save", function (next) {
+AddressSchema.pre<AddressDocument>("save", function ( next ) {
     if( !this.numberAddition ) this.numberAddition = ""
     next()
 })

@@ -2,8 +2,13 @@ import { Express, Request, Response } from "express"
 import { 
     createAddressRoute,
     getAllAddresses,
-    getAddress
+    getAddress,
+    updateAddress
 } from "./routes/address.routes"
+
+import { 
+    validatePatch,
+} from "./middleware"
 
 export default (app: Express) => {
     app.route("/address")
@@ -11,6 +16,6 @@ export default (app: Express) => {
         .get((req: Request, res: Response) => getAllAddresses(req, res))
     app.route("/address/:id")
         .get((req: Request, res: Response) => getAddress(req, res))
-        .patch()
-        .delete()
+        .patch(validatePatch, (req: Request, res: Response) => updateAddress(req, res))
+        .delete((req: Request, res: Response) => getAddress(req, res))
 }

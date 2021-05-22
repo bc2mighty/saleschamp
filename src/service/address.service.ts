@@ -25,3 +25,12 @@ export async function getAddress (id: string) {
         throw new Error(error)
     }
 }
+
+export async function updateAddress (id: string, body: object) {
+    try {
+        console.log(id)        
+        return await Address.findByIdAndUpdate(id, body, { new: true})
+    } catch (error) {
+        throw new Error(error)
+    }
+}
