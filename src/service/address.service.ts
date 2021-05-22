@@ -18,8 +18,7 @@ export async function allAddresses () {
 }
 
 export async function getAddress (id: string) {
-    try {
-        console.log(id)        
+    try { 
         return await Address.findById(id)
     } catch (error) {
         throw new Error(error)
@@ -27,9 +26,16 @@ export async function getAddress (id: string) {
 }
 
 export async function updateAddress (id: string, body: object) {
-    try {
-        console.log(id)        
+    try {     
         return await Address.findByIdAndUpdate(id, body, { new: true})
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export async function deleteAddress (id: string) {
+    try {
+        return await Address.findByIdAndDelete(id)
     } catch (error) {
         throw new Error(error)
     }

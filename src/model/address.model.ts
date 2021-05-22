@@ -44,7 +44,7 @@ const AddressSchema = new mongoose.Schema({
     status: {
         type: String,
         default: null,
-        enum: ["not at home", "not interested", "interested"]
+        enum: ["not at home", "not interested", "interested", null]
     },
     name: {
         type: String,

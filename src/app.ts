@@ -3,11 +3,13 @@ import { PORT, DB_URL } from "../config/defaults"
 import log from "./logger"
 import connect from "./db/connect"
 import routes from "./routes"
-import { contentType } from "./middleware"
+import { contentType, addContentTypeToDelete } from "./middleware"
 
 let app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false}))
+
+app.use(addContentTypeToDelete)
 app.use(contentType)
 
 app.listen(PORT, () => {

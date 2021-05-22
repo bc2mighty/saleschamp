@@ -3,7 +3,8 @@ import {
     createAddressHandler,
     getAllAddressHandler, 
     getAddressHandler, 
-    updateAddressHandler 
+    updateAddressHandler,
+    deleteAddressHandler
 } from "../controller/address.controller"
 
 export async function createAddressRoute(req: Request, res: Response) {
@@ -20,4 +21,9 @@ export async function getAddress(req: Request, res: Response) {
 
 export async function updateAddress(req: Request, res: Response) {
     return await updateAddressHandler(req, res)
+}
+
+export async function deleteAddress(req: Request, res: Response) {
+    // return res.send(req.params)
+    return await deleteAddressHandler(req, res)
 }

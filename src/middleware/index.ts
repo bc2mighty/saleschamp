@@ -12,7 +12,40 @@ export async function contentType (req: Request, res: Response, next: express.Ne
     next()
 }
 
-export async function validatePatch (req: Request, res: Response, next: express.NextFunction) {
+export async function addContentTypeToDelete ( req: Request, res: Response, next: express.NextFunction) {
+    if ( req.method === "DELETE") 
+        req.headers["content-type"] = "application/json"
+    
+    next()
+}
+
+export async function addLocation ( req: Request, res: Response, next: express.NextFunction) {
+    req.headers.location = "/address"
+    next()
+}
+
+export async function validatePostRequest (req: Request, res: Response, next: express.NextFunction) {
+    let addressPostAttributes = [
+        "country",
+        "city",
+        "street",
+        "postalcode",
+        "numberAddition",
+        "number"
+    ]
+
+    for ( let attribute of addressPostAttributes) {
+        if( !req.body.hasOwnProperty(attribute))
+            return res.status(422).json({message: `Please provide ${attribute}`})
+    }
+
+    if(JSON.stringify(addressPostAttributes) != JSON.stringify(Object.keys(req.body)))
+        return res.status(422).json({message: `Only ${addressPostAttributes.join(", ")} are allowed`})
+    
+    next()
+}
+
+export async function validatePatchRequest (req: Request, res: Response, next: express.NextFunction) {
     let addressUpdateAttributes = ["email", "status", "name"]
     let statusEnum = ["not at home", "not interested", "interested"]
     
