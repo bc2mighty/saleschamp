@@ -9,6 +9,9 @@ export interface AddressDocument extends mongoose.Document {
     postalcode: string,
     number: number,
     numberAddition: string,
+    status: string | null,
+    name: string | null,
+    email: string | null,
     createdAt: Date,
     updatedAt: Date
 }

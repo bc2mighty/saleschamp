@@ -29,9 +29,16 @@ export async function getAddressHandler(req: Request, res: Response) {
 }
 
 export async function updateAddressHandler(req: Request, res: Response) {
+    let address
     try {
-        const address = await updateAddress(req.params.id as string, req.body as object)
-        return res.status(200).json(address)
+        address = await getAddress(req.params.id as string)
+        if(!address.status || address.status === "not at home") {
+            address = await updateAddress(req.params.id as string, req.body as object)
+            return res.status(200).json(address)
+        } else {
+            return res.status(403).json({message: `Changes Disallowed beacuse Address status is ${address.status}`})
+        }
+
     } catch (error) {
         return res.status(404).json({message: `Address ID not found`})
     }
