@@ -37,6 +37,7 @@ export async function getAllAddressHandler(req: Request, res: Response) {
 
 export async function getAddressHandler(req: Request, res: Response) {
     let address
+    let dateOptions: object = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
     try {
         address = await client.getAsync(req.params.id as string)
         
@@ -46,7 +47,10 @@ export async function getAddressHandler(req: Request, res: Response) {
         } else {
             address = JSON.parse(address)
         }
+        
         return res
+            // .setHeader("Last-Modified", new Intl.DateTimeFormat('de-DE', dateOptions).format(address.updatedAt))
+            // .setHeader("If-Modified-Since", new Intl.DateTimeFormat('de-DE', dateOptions).format(address.updatedAt))
             .status(200)
             .json(address)
     } catch (error) {
